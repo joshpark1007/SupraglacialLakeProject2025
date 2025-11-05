@@ -1,5 +1,4 @@
 # Fall25-Python-FinalProject
-_Final Project for MPCS Fall25 Intermediate Python Programming_  
 Joshua (Chang Hyeon) Park
 ## Jakobshavn Supraglacial Lake Detection
 
@@ -33,7 +32,6 @@ Apply thresholds to generate preliminary binary masks separating water and ice.
 
 ### Machine Learning ###
 #### Method Overview:
-Ambitious, but do-able for preliminary scope.
 7. **Dataset Prepartion for ML**
 Convert raster masks and corresponding Sentinel-2 imagery into training patches, ensuring spatial alignment.
 Split the dataset into training (70%), validation (15%), and test (15%) subsets.  
