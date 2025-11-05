@@ -1,0 +1,11 @@
+<Research on ML/CNN/U-Net>
+
+Readings Done
+https://medium.com/@draj0718/convolutional-neural-networks-cnn-architectures-explained-716fb197b243
+https://sebastianraschka.com/teaching/pytorch-1h/
+https://developers.arcgis.com/python/latest/guide/how-unet-works/
+https://www.mdpi.com/1872032 : previous research example on using SAR Images and Attention-Based U-Net
+
+More Readings
+https://medium.com/data-science/a-detailed-explanation-of-the-attention-u-net-b371a5590831
+https://blog.tensorflow.org/2022/12/introducing-simple-ml-for-sheets.html

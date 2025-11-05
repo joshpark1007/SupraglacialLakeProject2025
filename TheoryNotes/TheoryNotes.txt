@@ -1,0 +1,24 @@
+Normalized Difference Water Index (NDWI) : spectral index used to highlight surface water
+B3 (Green, 560nm)
+B8 (NIR, 842nm)
+NDWI = (B3 - B8)/(B3+B8)
+Supraglacial lakes or melt ponds (wet ice surfaces are detectable when NDWI > 0.1 to 0.3)
+Optional B11(SWI ~1610nm) can help distinguish snow bc B11 for snow and water is very low, a bit higher for ice)
+
+Difference in Snow, Water, and Ice (snow and water having a relatively lower SWIR band)
+1. Snow = small grains + high surface scattering
+porous structure, multiple scattering in visible range | but strong absorption in SWIR
+
+2. Glacial Ice = larger grains, dense structure
+resulting in higher SWIR reflectance than fresh snow
+
+FLAG: Sneed and Hamilton (2007) for relative depth measurements
+
+<Terminology>
+
+CRS: Coordinate Reference System (geographic data projected onto a flat surface of x/y pixels
+
+Common CRS Types
+UTM Zone 22N | EPSG:32622 (Greenland Sentinel-2 Tiles)
+Polar Stereographic (North) | EPSG: 3413 ArcticDEM
+EPSG stands for European Petroleum Survey Group
