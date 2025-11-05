@@ -62,7 +62,7 @@ Reprojects ArcticDEM tiles to match the CRS, grid, and resolution of Sentinel-2 
 Loads Sentinel-2 spectral bands (e.g., B03, B08) from .SAFE directories, computes the Normalized Difference Water Index (NDWI),
 and prepares raster data for meltwater mapping and machine learning input. Includes utilities to extract band profiles, read arrays, and generate NDWI masks.
 
-`build_vrt.py`: # this step was automated with the help of existing LLM
+`build_vrt.py`: # this step was automated with the help of existing LLM  
 Finds ArcticDEM STRIP tiles that overlap a Sentinel-2 area of interest (AOI).
 Generates URL lists and a small fetch script (fetch-dem.sh) to download and extract the tiles, then uses GDAL’s gdalbuildvrt to assemble them into a Virtual Raster Tile (VRT) — a lightweight mosaic referencing all DEM tiles without physically merging them.
 This forms the base DEM mosaic for later reprojection and NDWI alignment.
