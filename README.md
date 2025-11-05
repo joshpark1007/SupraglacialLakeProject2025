@@ -1,4 +1,4 @@
-# Fall25-Python-FinalProject
+# Supraglacial Lake Detection Project | Fall 2025
 Joshua (Chang Hyeon) Park
 ## Jakobshavn Supraglacial Lake Detection
 
