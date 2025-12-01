@@ -33,14 +33,14 @@ Apply thresholds to generate preliminary binary masks separating water and ice.
 ### Machine Learning ###
 #### Method Overview:
 7. **Dataset Prepartion for ML**
-Convert raster masks and corresponding Sentinel-2 imagery into training patches, ensuring spatial alignment.
-Split the dataset into training (70%), validation (15%), and test (15%) subsets.  
+- Convert large rasters (NDWI + mask) into overlapping tiles (e.g., 256×256 with stride 128).  
+- Split into train / val / test sets.
 8. **CNN/U-Net Segmentation**
-Train a convolutional neural network (U-Net architecture) to automatically segment meltwater features.
-The model learns spatial patterns in NDWI imagery and DEM context to detect lakes with higher precision and reproducibility 
-beyond target Sentinel tile and timefrmae.
+- Train a convolutional U-Net on tiles to segment meltwater features.  
+- The network learns spatial patterns beyond simple thresholding
 9. **Evaluation and Visualization**
-Assess segmentation performance (IoU, precision, recall) and visualize detected melt ponds across time to analyze spatial-temporal evolution.
+- Metrics: IoU, precision, recall (per tile and aggregated).  
+- Visualize probability maps and thresholded predictions side-by-side with NDWI and ground truth.
 
 ## Python Tools and Libraries ##
 `rasterio` - core library for reading, writing, and transforming geospatial raster data (used for CRS extraction, reprojection, and masking)  
