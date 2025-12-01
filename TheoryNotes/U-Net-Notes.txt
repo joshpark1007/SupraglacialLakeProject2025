@@ -1,0 +1,76 @@
+# Workflow
+
+1. Download Sentinel SAFE file
+2. load_bands.py produces NDWI
+3. build_vrt.py gives target url for DEM, main.py clips DEM
+4. make_tiles.py creates trainable patches (grid of 256 x 256 pixels) for both image (NDWI) and mask (0, 1)
+5. check_tiles.py for sanity check
+6. dataset.py to convert npz into tensors for training
+7. unet.py to conduct training
+8. runner script train.py
+
+A single patch image (NumPy arrays)
+: A grid of 256 x 256 pixels
+: Each pixel has a real number NDWI value
+=> have only one channel, NDWI is a band math product
+
+A single patch of mask (Numpy Array)
+: A grid of 256 x 256
+: Each pixel says 1 = lake, 0 = not lake (ground truth)
+
+(from dataset.py)
+img = torch.from_numpy(img_np).float()
+mask = torch.from_numpy(mask_np).float()
+1) move from NumPy to PyTorch
+    - PyTorch ops (Conv2d, pooling, training) operates in tensors
+    - Tensors support automatic differentiation
+2) Converting it into a shape PyTorch understands
+(Batch, Channels, Height, Width)
+
+[U-Net Architecture unet.py]
+DoubleConv
+3x3 -> ReLU -> 3x3 -> ReLU unit
+
+Encoder (down path)
+Down1 → Pool
+Down2 → Pool
+Down3 → Pool
+
+Bottleneck
+DoubleConv
+
+Decoder (up path)
+ConvTranspose2d → concat skip → DoubleConv
+ConvTranspose2d → concat skip → DoubleConv
+ConvTranspose2d → concat skip → DoubleConv
+
+1x1 conv (1 output channel)
+: one lake probability per pixel
+
+nn.Conv2d: small sliding window (kernel) that moves over the tiles and detects patterns
+nn.Conv2d(
+    in_channels=1,
+    out_channels=32,
+    kernel_size=3,
+    padding=1
+)
+1 channel, layer 32 different filters, each being a 3x3 learnable pattern, padding=1 ensuring the same output size
+
+nn.ReLU: throws away negative activations and keeps positive ones
+
+[U-Net Log]
+Initial Training
+Dataset size: 2833
+Batch shapes: torch.Size([4, 1, 256, 256]) torch.Size([4, 1, 256, 256])
+Model created!
+Logits shape: torch.Size([4, 1, 256, 256])
+Initial loss: 0.6614547967910767
+
+3 Epoch Runs: November 26th
+Total tiles: 2833
+Train tiles: 2550
+Val tiles:   283
+Epoch 1/3 - train loss: 0.0921 - val loss: 0.0725
+Epoch 2/3 - train loss: 0.0645 - val loss: 0.0744
+Epoch 3/3 - train loss: 0.0632 - val loss: 0.0707
+✅ Training complete, model saved to unet_lakes.pth

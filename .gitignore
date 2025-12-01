@@ -1,0 +1,16 @@
+# Raw Data inputs are too big to push to git
+
+# Ignore ALL ArcticDEM downloads, VRTs, and tiles
+data/indexes
+
+data/raw/ArcticDEM/*
+!data/raw/ArcticDEM/README.md
+!data/raw/ArcticDEM/dem_urls*
+!data/raw/ArcticDEM/fetch-dem.sh
+!data/raw/ArcticDEM/arcticdem_mosaic.vrt
+
+# Ignore SAFE files
+data/raw/SAFE/*
+!data/raw/SAFE/README.md
+
+data/derived

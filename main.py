@@ -1,7 +1,7 @@
 """
 Preliminary Visualization Code for Jakobshavn Supraglacial Lake detection
 Target SAFE file: T22WDA
-Output: side by side plot to see preliminary map and check if the code is working
+Output: clipped images with SAFE NDWI and ArcticDEM into gpkg (path: data/derived/lakes)
 """
 import sys
 print("PYTHON USED:", sys.executable)
@@ -111,16 +111,29 @@ def process_safe(safe_path: str, dem_path: str, out_root: str,
 
     # PART 03 Align DEM to Sentinel grid (writes GeoTIFFs)
 
+    print("📁 Checking cached DEM alignments…")
+
     s2_b03_path = crs_utils.find_band_path(safe_path, "B03_10m")
-    aligned_dem_path, clipped_dem_path = dem_utils.align_dem_to_sentinel(
-        dem_path=dem_path,
-        sentinel_band_path=s2_b03_path,
-        out_aligned_path=os.path.join(out_root, "dem_to_sentinel.tif"),
-        out_clipped_path=os.path.join(out_root, "dem_to_sentinel_clipped.tif"),
-        dst_nodata=-9999
-    )
-    print("🗺️ DEM aligned:", aligned_dem_path)
-    print("✂️  DEM clipped:", clipped_dem_path)
+
+    # reducing recomputation over same target grid across temporal scales
+    aligned_dem_path = os.path.join(out_root, "dem_to_sentinel.tif")
+    clipped_dem_path = os.path.join(out_root, "dem_to_sentinel_clipped.tif")
+
+    need_align = not os.path.exists(aligned_dem_path)
+    need_clip = not os.path.exists(clipped_dem_path)
+
+    if need_align or need_clip:
+        print("🔄 Computing DEM alignment (first time)…")
+        aligned_dem_path, clipped_dem_path = dem_utils.align_dem_to_sentinel(
+            dem_path=dem_path,
+            sentinel_band_path=s2_b03_path,
+            out_aligned_path=aligned_dem_path,
+            out_clipped_path=clipped_dem_path,
+            dst_nodata=-9999
+        )
+    else:
+        print("🗺️ Reusing existing DEM alignment:", aligned_dem_path)
+        print("✂️  Reusing existing DEM clip:", clipped_dem_path)
 
     # PART 04 NDWI + Save Raw Mask
     ndwi, ndwi_profile = load_bands.load_ndwi_from_safe(safe_path)
@@ -256,8 +269,11 @@ if __name__ == "__main__":
 """
 August 3rd, 2024 Tile T22WDA (Model Set-up)
 python main.py process \
-  --safe "/Users/josh/Projects/GLDetection/data/raw/SAFE/S2B_MSIL2A_20240803T151809_N0511_R068_T22WDA_20240803T192030.SAFE" \
-  --dem  "/Users/josh/Projects/GLDetection/data/raw/ArcticDEM/SETSM_s2s041_WV02_20210823_10300100C40D0900_10300100C47B7700_2m_lsf_seg1/SETSM_s2s041_WV02_20210823_10300100C40D0900_10300100C47B7700_2m_lsf_seg1_dem.tif" \
-  --out  "/Users/josh/Projects/GLDetection/outputs" \
-  --ndwi 0.25 --emin 0 --min-area-m2 1000 --ext gpkg    
+  --safe "data/raw/SAFE/S2B_MSIL2A_20240803T151809_N0511_R068_T22WDA_20240803T192030.SAFE" \
+  --dem  "data/raw/ArcticDEM/arcticdem_mosaic.vrt" \
+  --out  "data/derived/lakes" \
+  --ndwi 0.25 \
+  --emin 0 \
+  --min-area-m2 1000 \
+  --ext gpkg    
 """
