@@ -1,0 +1,13 @@
+numpy
+rasterio
+geopandas
+shapely
+pyproj
+matplotlib
+tqdm
+
+torch
+torchvision
+
+pandas
+scipy
