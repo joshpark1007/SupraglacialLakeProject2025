@@ -19,7 +19,7 @@ This includes locating and loading Sentinel-2 .SAFE directories, extracting CRS 
 (2) Machine Learning Pipeline  
 Using NDWI and corresponding masks, the project splits large rasters into 256×256 image tiles, constructs PyTorch datasets, trains a U-Net segmentation model, and visualizes predictions. This allows the network to learn melt pond characteristics beyond simple thresholding.
 
-
+![Pipeline Diagram](images/supraglacial_pipeline.jpg)
 
 ### Data Set Preparation ###
 #### Method Overview:
