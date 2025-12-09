@@ -47,15 +47,16 @@ These binary masks serve as ground truth labels for downstream model training.
 
 ## Machine Learning: 
 #### Method Overview:
-7. **Dataset Prepartion for ML**
-- Convert large rasters (NDWI + mask) into overlapping tiles (e.g., 256×256 with stride 128).  
-- Split into train / val / test sets.
-8. **CNN/U-Net Segmentation**
-- Train a convolutional U-Net on tiles to segment meltwater features.  
-- The network learns spatial patterns beyond simple thresholding
-9. **Evaluation and Visualization**
-- Metrics: IoU, precision, recall (per tile and aggregated).  
-- Visualize probability maps and thresholded predictions side-by-side with NDWI and ground truth.
+8. **Tile Generation for ML Training**  
+Convert the NDWI raster and corresponding binary mask into overlapping fixed-size tiles (e.g., 256×256 with stride 128). Tiling enables the network to learn fine-scale spatial patterns and ensures adequate sample diversity across the glacier surface.
+9. **Dataset Construction (PyTorch)**  
+Package tiles into PyTorch datasets and dataloaders, normalizing inputs and pairing each tile with its mask. This step handles the train/val/test split and ensures consistent preprocessing for model ingestion.
+10. **U-Net Model Training**
+Train a convolutional U-Net to segment meltwater features from input tiles. The encoder–decoder architecture, with skip connections and 3×3 convolution blocks, allows the network to integrate both global context and fine-grained spatial detail. Training optimizes a segmentation loss (e.g., BCE or Dice) to improve alignment between predictions and binary meltwater masks.
+11. **Prediction & Probability Maps**  
+Run the trained model on withheld validation tiles to generate per-pixel probability maps. These maps highlight uncertain boundaries, thin melt channels, and partially flooded areas that simple NDWI thresholding cannot reliably detect.
+13. **Evaluation and Visualization**  
+Compare predicted masks with ground-truth binary masks using metrics such as Intersection-over-Union (IoU), precision, recall, and pixel accuracy. Visualize NDWI, true masks, prediction maps, and thresholded outputs side-by-side to assess both quantitative and qualitative model performance.
 
 ## Python Tools and Libraries ##
 `rasterio` - core library for reading, writing, and transforming geospatial raster data (used for CRS extraction, reprojection, and masking)  
