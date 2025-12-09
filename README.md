@@ -58,6 +58,8 @@ Run the trained model on withheld validation tiles to generate per-pixel probabi
 13. **Evaluation and Visualization**  
 Compare predicted masks with ground-truth binary masks using metrics such as Intersection-over-Union (IoU), precision, recall, and pixel accuracy. Visualize NDWI, true masks, prediction maps, and thresholded outputs side-by-side to assess both quantitative and qualitative model performance.
 
+![Visualization](images/supraglacial_visualization.jpg)
+
 ## Python Tools and Libraries ##
 `rasterio` - core library for reading, writing, and transforming geospatial raster data (used for CRS extraction, reprojection, and masking)  
 `GDAL` - underlying geospatial engine that powers raster operations; used here via command-line tools like `gdalbuildvrt` for mosaicking DEM tiles  
