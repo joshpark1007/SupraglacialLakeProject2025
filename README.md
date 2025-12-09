@@ -1,6 +1,6 @@
 # Supraglacial Lake Detection Project | Fall 2025
 Joshua (Chang Hyeon) Park | University of Chicago
-## Jakobshavn Supraglacial Lake Detection
+## Project Motivation & Context:
 
 As anthropogenic climate change accelerates surface melt across the polar regions, the retreat of marine-terminating glaciers has become a major contributor to global sea-level instability. On the Greenland Ice Sheet (GrIS), the rapid formation and drainage of supraglacial lakes play a critical role in hydrofracture and ice-flow acceleration.
 
@@ -21,25 +21,31 @@ Using NDWI and corresponding masks, the project splits large rasters into 256×2
 
 ![Pipeline Diagram](images/supraglacial_pipeline.jpg)
 
-### Data Set Preparation ###
+## Data Set Preparation:
 #### Method Overview:
 1. **CRS Extraction**  
-Read EPSG and CRS metadata from Sentinel-2 `.SAFE` folders and ArcticDEM `GeoTIFF`.
-2. **Geometric 'preflight' check**  
-Confirm overlapping bounds between datasets before reprojection.  
-3. **DEM Reprojection and Alignment**
-Match DEM resolution, grid, and CRS to Sentinel-2 imagery. This process also involves selecting a target tile from a user friendly interface in
-the Copernicus dataset, extracting CRS from target tiles and compiling a list of urls to download target DEM areas.
-4. **Clipping**  
-Trim DEMs to exact Sentinel footprint for spatial consistency.
-5. **Integration with Shapefiles**  
-Use aligned rasters for creating and overlaying shapefiles of melt ponds, catchments, or training polygons. This process will
-use GIS/ArcGISPro for tracing.
-6. **NDWI Computation & Mask Generation**  
-Compute the Normalized Difference Water Index (NDWI) from Sentinel-2 bands (B03, B08) to identify meltwater bodies.  
-Apply thresholds to generate preliminary binary masks separating water and ice.
+Read EPSG codes and CRS metadata from Sentinel-2 .SAFE folders and ArcticDEM GeoTIFF files.
+This ensures both datasets share a consistent spatial reference before any geometric operations.
+2. **Geometric Pre-Flight check**  
+Verify that the spatial bounds of Sentinel-2 imagery overlap with downloaded ArcticDEM tiles.
+This prevents unnecessary reprojecting/clipping of DEMs that do not intersect the study region.
+3. **DEM URL Extraction (ArcticDEM Mosaic to Strip URLs)
+Identify which ArcticDEM strips overlap the Sentinel-2 footprint by filtering the mosaic index.
+Extract corresponding download URLs to prepare inputs for VRT construction.
+4. **DEM VRT Construction**
+Using the extracted strip URLs, build a unified DEM mosaic (.vrt) to standardize data access and minimize file handling.
+5. **DEM Reprojection and Alignment**
+Match the DEM’s CRS, resolution, and grid to Sentinel-2 geometry.
+This ensures that elevation and NDWI rasters share identical spatial coordinates.
+6. **Footprint Clipping**  
+Trim DEM mosaics to the exact Sentinel tile footprint.
+Clipping ensures spatial consistency across all downstream products, including masks and training tiles.
+7. **NDWI Computation & Mask Generation**  
+Calculate NDWI using Sentinel-2 bands B03 and B08 to isolate meltwater features.
+Apply thresholding to produce preliminary binary masks separating water from ice/snow.
+These binary masks serve as ground truth labels for downstream model training.
 
-### Machine Learning ###
+## Machine Learning: 
 #### Method Overview:
 7. **Dataset Prepartion for ML**
 - Convert large rasters (NDWI + mask) into overlapping tiles (e.g., 256×256 with stride 128).  
