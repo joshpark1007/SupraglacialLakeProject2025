@@ -1,5 +1,5 @@
 # Supraglacial Lake Detection Project | Fall 2025
-Joshua (Chang Hyeon) Park
+Joshua (Chang Hyeon) Park | University of Chicago
 ## Jakobshavn Supraglacial Lake Detection
 
 As anthropogenic climate change accelerates surface melt across the polar regions, the retreat of marine-terminating glaciers has become a major contributor to global sea-level instability. On the Greenland Ice Sheet (GrIS), the rapid formation and drainage of supraglacial lakes play a critical role in hydrofracture and ice-flow acceleration.
@@ -9,13 +9,17 @@ This project applies computer vision techniques to Sentinel-2 imagery and trains
 ## Project Description:
 The Supraglacial Lake Detection Project focuses on automating the identification of melt ponds on Jakobshavn Glacier using a combination of satellite imagery, geospatial preprocessing, and a U-Net segmentation model. The goal is to build a fully reproducible workflow that transforms raw Sentinel-2 Level-2A imagery and ArcticDEM elevation data into spatially aligned datasets suitable for machine learning.
 
+(images/supraglacial_projectgoals.jpg)
+
 The project has two major components:
 
-(1) Geospatial Data Preparation
+(1) Geospatial Data Preparation  
 This includes locating and loading Sentinel-2 .SAFE directories, extracting CRS metadata, identifying overlapping ArcticDEM strips, building a VRT mosaic, reprojecting the DEM to match the Sentinel geometry, clipping rasters to a shared footprint, computing NDWI, and generating initial binary meltwater masks.
 
-(2) Machine Learning Pipeline
+(2) Machine Learning Pipeline  
 Using NDWI and corresponding masks, the project splits large rasters into 256×256 image tiles, constructs PyTorch datasets, trains a U-Net segmentation model, and visualizes predictions. This allows the network to learn melt pond characteristics beyond simple thresholding.
+
+(images/supraglacial_pipeline.jpg)
 
 ### Data Set Preparation ###
 #### Method Overview:
