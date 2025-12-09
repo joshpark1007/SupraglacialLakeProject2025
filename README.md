@@ -8,9 +8,15 @@ supraglacial lake formation that leads to mass drainages and hydrofracturing. Th
 techniques to analyze satellite imagery, train a neural network to identify and track changes to the lake formation over time.
 
 ## Project Description:
-A geospatial workflow for aligning Sentinel-2 imagery (European Space Agency) and Arctic Digital Elevation Model (DEM) to
-accurately sort out and segment glacier surface melt against ice mass. The goal is to prepare spatially consistent datasets for melt pond detection
-by building a pipeline that aligns and reprojects two different maps based on coordinate reference systems (CRS).
+The Supraglacial Lake Detection Project focuses on automating the identification of melt ponds on Jakobshavn Glacier using a combination of satellite imagery, geospatial preprocessing, and a U-Net segmentation model. The goal is to build a fully reproducible workflow that transforms raw Sentinel-2 Level-2A imagery and ArcticDEM elevation data into spatially aligned datasets suitable for machine learning.
+
+The project has two major components:
+
+(1) Geospatial Data Preparation
+This includes locating and loading Sentinel-2 .SAFE directories, extracting CRS metadata, identifying overlapping ArcticDEM strips, building a VRT mosaic, reprojecting the DEM to match the Sentinel geometry, clipping rasters to a shared footprint, computing NDWI, and generating initial binary meltwater masks.
+
+(2) Machine Learning Pipeline
+Using NDWI and corresponding masks, the project splits large rasters into 256×256 image tiles, constructs PyTorch datasets, trains a U-Net segmentation model, and visualizes predictions. This allows the network to learn melt pond characteristics beyond simple thresholding.
 
 ### Data Set Preparation ###
 #### Method Overview:
