@@ -60,27 +60,72 @@ Compare predicted masks with ground-truth binary masks using metrics such as Int
 
 ![Visualization](images/supraglacial_visualization.jpg)
 
-## Python Tools and Libraries ##
-`rasterio` - core library for reading, writing, and transforming geospatial raster data (used for CRS extraction, reprojection, and masking)  
-`GDAL` - underlying geospatial engine that powers raster operations; used here via command-line tools like `gdalbuildvrt` for mosaicking DEM tiles  
-`geopandas` - for reading shapefiles and vector indices  
-`numpy` - array math for raster operations, resampling, and mask creation  
-`matplotlib` - for quick visualization of raster (mostly for debugging and analysis)  
+### Python Tools and Libraries
+
+- **rasterio** — Core library for reading, writing, and transforming geospatial rasters.  
+  Used for CRS extraction, reprojection, clipping, and NDWI computation.
+
+- **GDAL** — Geospatial engine that powers raster operations.  
+  Invoked via command-line tools (e.g., `gdalbuildvrt`) to mosaic ArcticDEM strips into a unified VRT.
+
+- **geopandas** — Used for loading shapefiles and vector indices when validating spatial footprints or training polygons.
+
+- **numpy** — Array math for raster operations, resampling, mask creation, and preprocessing before tiling.
+
+- **matplotlib** — Used primarily for debugging and analysis: plotting NDWI maps, DEM slices, and U-Net outputs.
 
 ## File Descriptions (bookkeeping) ##
-`crs_utils.py`: 
+#### 1. Sentinel & DEM Processing
+`Sentinel/load_bands.py`:
+Loads Sentinel-2 spectral bands (B03, B08) from .SAFE directories and computes NDWI.
+Includes helper utilities for reading band arrays, extracting raster metadata, and generating preliminary meltwater masks.
+
+`CRS/crs_utils.py`: 
 Extracts coordinate reference system (CRS) and EPSG metadata from Sentinel-2 .SAFE folders and ArcticDEM GeoTIFFs.
 Used to ensure all datasets share the same spatial reference before reprojection or alignment.
 
-`dem_utils.py`: 
+`Geometry/geometry_utils.py`:
+Performs geometric “pre-flight” checks such as bounding-box overlap, footprint intersection, and tile geometry validation to confirm that Sentinel and DEM data cover the same region.
+
+`DEM/dem_utils.py`: 
 Handles Digital Elevation Model (DEM) loading, reprojection, and clipping.
 Reprojects ArcticDEM tiles to match the CRS, grid, and resolution of Sentinel-2 imagery, producing spatially aligned elevation data.
 
-`load_bands.py`: 
-Loads Sentinel-2 spectral bands (e.g., B03, B08) from .SAFE directories, computes the Normalized Difference Water Index (NDWI),
-and prepares raster data for meltwater mapping and machine learning input. Includes utilities to extract band profiles, read arrays, and generate NDWI masks.
-
-`build_vrt.py`: # this step was automated with the help of existing LLM  
+`VRT/build_vrt.py`:
 Finds ArcticDEM STRIP tiles that overlap a Sentinel-2 area of interest (AOI).
 Generates URL lists and a small fetch script (fetch-dem.sh) to download and extract the tiles, then uses GDAL’s gdalbuildvrt to assemble them into a Virtual Raster Tile (VRT) — a lightweight mosaic referencing all DEM tiles without physically merging them.
 This forms the base DEM mosaic for later reprojection and NDWI alignment.
+
+`main.py`:
+Orchestrates the full pipeline: loads raw Sentinel/DEM data, computes NDWI, aligns DEM, produces masks, and prepares rasters for tiling.
+
+#### 2. Tile Generation & Dataset Construction
+`make_tiles.py`:
+Converts aligned NDWI and mask rasters into fixed-size overlapping tiles (e.g., 256×256 with stride 128).
+Supports dataset preparation for deep learning and consistent naming conventions.
+
+`dataset.py`:
+Defines a PyTorch Dataset class for loading image-mask tile pairs.
+Handles normalization, transforms, and train/validation/test partitioning.
+
+`check_tiles.py`:
+Visual debugging tool used to inspect tile boundaries, verify alignment, and ensure NDWI/mask consistency.
+
+#### 3. U-Net Model Training & Inference
+`train.py`:
+Implements the main training loop, evaluation metrics (IoU, precision, recall), optimizer configuration, and checkpoint saving.
+Trains a U-Net model to segment meltwater features from input tiles.
+
+`unet.py`:
+Defines the U-Net encoder–decoder architecture with skip connections and convolution blocks.
+Supports configurable depth and channels for experimentation.
+
+`visualization.py`:
+Produces prediction visualizations, probability maps, comparative plots (NDWI vs. mask vs. prediction), and outputs used in evaluation or README figures.
+
+#### 4. U-Net Model Training & Inference
+`TheoryNotes/`:
+Contains handwritten and conceptual notes on NDWI computation, DEM alignment, tiling strategy, segmentation logic, and training decisions.
+
+`images/`:
+Stores pipeline diagrams, project goals figures, U-Net sample predictions, and other figures used in the README.
