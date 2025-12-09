@@ -69,6 +69,9 @@ def write_fetch_script(out_dir: Path, urls_txt: Path, tiles_dir: Path, vrt_path:
       - extracts .tar.gz, deletes archives
       - builds VRT from *_dem.tif
     """
+    urls_txt = urls_txt.resolve()
+    tiles_dir = tiles_dir.resolve()
+    vrt_path = vrt_path.resolve()
     script = f"""#!/bin/bash
 set -euo pipefail
 
