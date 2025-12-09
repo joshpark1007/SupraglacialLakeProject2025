@@ -9,7 +9,7 @@ This project applies computer vision techniques to Sentinel-2 imagery and trains
 ## Project Description:
 The Supraglacial Lake Detection Project focuses on automating the identification of melt ponds on Jakobshavn Glacier using a combination of satellite imagery, geospatial preprocessing, and a U-Net segmentation model. The goal is to build a fully reproducible workflow that transforms raw Sentinel-2 Level-2A imagery and ArcticDEM elevation data into spatially aligned datasets suitable for machine learning.
 
-(images/supraglacial_projectgoals.jpg)
+![Project Goals](images/supraglcial_projectgoals.jpg)
 
 The project has two major components:
 
@@ -19,7 +19,7 @@ This includes locating and loading Sentinel-2 .SAFE directories, extracting CRS 
 (2) Machine Learning Pipeline  
 Using NDWI and corresponding masks, the project splits large rasters into 256×256 image tiles, constructs PyTorch datasets, trains a U-Net segmentation model, and visualizes predictions. This allows the network to learn melt pond characteristics beyond simple thresholding.
 
-(images/supraglacial_pipeline.jpg)
+![Pipeline Diagram](images/supraglacial_pipeline.jpg)
 
 ### Data Set Preparation ###
 #### Method Overview:
