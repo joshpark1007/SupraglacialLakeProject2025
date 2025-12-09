@@ -125,3 +125,18 @@ Contains handwritten and conceptual notes on NDWI computation, DEM alignment, ti
 
 `images/`:
 Stores pipeline diagrams, project goals figures, U-Net sample predictions, and other figures used in the README.
+
+## Notes: Sentinel Tiles used for this version ##
+❄️[Summer 2024]
+Date: 2024.08.03
+SAFE: S2B_MSIL2A_20240803T151809_N0511_R068_T22WDA_20240803T192030.SAFE ✅
+
+Date: 2024.07.27
+SAFE: S2B_MSIL2A_20240727T152809_N0511_R111_T22WDA_20240727T174421.SAFE ✅
+
+❄️[Summer 2023]
+Date: 2023.07.30
+SAFE: S2B_MSIL2A_20230730T151809_N0510_R068_T22WDA_20241014T000717.SAFE ✅
+
+Date: 2023.06.30
+SAFE: S2B_MSIL2A_20230630T151809_N0510_R068_T22WDA_20240925T114019.SAFE ✅
