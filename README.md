@@ -2,10 +2,9 @@
 Joshua (Chang Hyeon) Park
 ## Jakobshavn Supraglacial Lake Detection
 
-With anthropogenic climate change accelerating polar melt, the retreat of marine-terminating glaciers poses a major
-threat to global sea-level instability. One of the biggest challenges in the Greenland Ice Sheet (GrIS) is the increasing amount of
-supraglacial lake formation that leads to mass drainages and hydrofracturing. This project aims to apply computer vision
-techniques to analyze satellite imagery, train a neural network to identify and track changes to the lake formation over time.
+As anthropogenic climate change accelerates surface melt across the polar regions, the retreat of marine-terminating glaciers has become a major contributor to global sea-level instability. On the Greenland Ice Sheet (GrIS), the rapid formation and drainage of supraglacial lakes play a critical role in hydrofracture and ice-flow acceleration.
+
+This project applies computer vision techniques to Sentinel-2 imagery and trains a neural network to automatically detect and delineate supraglacial meltwater ponds.
 
 ## Project Description:
 The Supraglacial Lake Detection Project focuses on automating the identification of melt ponds on Jakobshavn Glacier using a combination of satellite imagery, geospatial preprocessing, and a U-Net segmentation model. The goal is to build a fully reproducible workflow that transforms raw Sentinel-2 Level-2A imagery and ArcticDEM elevation data into spatially aligned datasets suitable for machine learning.
