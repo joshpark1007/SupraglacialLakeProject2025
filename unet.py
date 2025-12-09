@@ -1,3 +1,10 @@
+"""
+File: unet.py
+Purpose: Define a compact U-Net architecture (encoder–decoder with skip
+         connections) for binary supraglacial lake segmentation on NDWI
+         tiles. Used by train.py and visualization scripts.
+"""
+
 import torch
 import torch.nn as nn
 

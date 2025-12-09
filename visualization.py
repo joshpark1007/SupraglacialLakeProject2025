@@ -1,11 +1,15 @@
-# visualize.py
-# preliminary code
+"""
+File: visualize.py
+Purpose: Load a trained U-Net model and sample NDWI tiles to produce
+         qualitative diagnostics: NDWI input, ground-truth mask, predicted
+         probability maps, and thresholded overlays for visual inspection.
+"""
+
 import torch
 import matplotlib.pyplot as plt
 
 from dataset import LakeTileDataset
 from unet import UNetSmall
-
 
 def visualize_samples(indices=None, threshold=0.5, num_samples=4):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

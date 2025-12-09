@@ -1,4 +1,11 @@
-# train.py
+"""
+File: train_sanity.py
+Purpose: Lightweight sanity check for the tiling and model setup. Loads a
+         batch from LakeTileDataset, runs a forward pass through UNetSmall,
+         computes an initial loss, and performs one optimizer step to verify
+         that training can proceed without errors.
+"""
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader

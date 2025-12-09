@@ -1,13 +1,11 @@
 """
-train.py
-
-For each epoch, iterate over all tiles in train_loader
-For each (img, mask) batch:
-    - U-Net predicts logits (where it thinks the lakes are)
-    - BCEWithLgotisLoss compares logits vs real mask
-    - Backpropagation adjusts filters so predictions move closer to truth
-Starting with 3 Epochs
+File: train.py
+Purpose: Train a small U-Net segmentation model on NDWI + lake-mask tiles.
+         Splits the dataset into train/validation sets, runs a few epochs of
+         BCEWithLogitsLoss optimization, reports losses, and saves weights
+         to unet_lakes.pth.
 """
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, random_split

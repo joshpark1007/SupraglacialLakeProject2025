@@ -1,8 +1,11 @@
 """
-Preliminary Visualization Code for Jakobshavn Supraglacial Lake detection
-Target SAFE file: T22WDA
-Output: clipped images with SAFE NDWI and ArcticDEM into gpkg (path: data/derived/lakes)
+File: main.py
+Purpose: Run the geospatial preprocessing pipeline for a Sentinel-2 .SAFE scene:
+         compute NDWI, align ArcticDEM via VRT, apply an elevation filter, and
+         export supraglacial lake masks as rasters and vector polygons
+         (single-tile or batch mode via CLI).
 """
+
 import sys
 print("PYTHON USED:", sys.executable)
 
@@ -265,15 +268,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-"""
-August 3rd, 2024 Tile T22WDA (Model Set-up)
-python main.py process \
-  --safe "data/raw/SAFE/S2B_MSIL2A_20240803T151809_N0511_R068_T22WDA_20240803T192030.SAFE" \
-  --dem  "data/raw/ArcticDEM/arcticdem_mosaic.vrt" \
-  --out  "data/derived/lakes" \
-  --ndwi 0.25 \
-  --emin 0 \
-  --min-area-m2 1000 \
-  --ext gpkg    
-"""

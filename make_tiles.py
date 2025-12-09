@@ -1,43 +1,11 @@
 """
-make_tiles.py
-
-Cut NDWI + Lake Mask Rasters into smaller tiles for U-Net training
-
-So far:
-1) Processed Sentinel Level 2 Lower Atmosphere into NDWI map
-2) Extracted CRS from Sentinel, utilized VRT to automatically generate list of url for ArcticDEM tiles corresponding
-3) Stitched the target DEM into one mosaic (data/raw/ArcticDEM/arcticdem_mosaic.vrt)
-4) Clipped the NDWI map and Lake Mask into a singular raster with given thresholds
-5) Will cut the tiles into smaller tiles for U-Net training
-
-Expected Script:
-python make_tiles.py \
-  --in-dir data/derived/lakes \
-  --out-dir data/tiles \
-  --tile-size 256 \
-  --stride 128
-
-What the script does:
-- Searches for NDWI rasters named:
-      <timestamp>_<tile>_ndwi_0.25.tif
-- Finds the corresponding lake mask raster:
-      <timestamp>_<tile>_lake_ndwi0.25_dem0.tif
-- Ensures both rasters share identical grid shape + transform
-- Slides a window across both rasters:
-      window size = tile-size (default 256)
-      step size   = stride (default 128)
-- Saves each tile as a compressed .npz file:
-      images/  → NDWI tiles (shape: 1 × H × W)
-      masks/   → binary lake-mask tiles (shape: H × W)
-
-Purpose: finding files like 2024-08-03_T22WDA_ndwi_0.25.tif, match with 2024-08-03_T22WDA_lake_ndwi0.25_dem0.tif
-and cut them into aligned tiles for image segmentation modeling
-
-Output:
-Creates a dataset directory containing two subfolders:
-    data/derived/tiles/images/
-    data/derived/tiles/masks/
+File: make_tiles.py
+Purpose: Convert aligned NDWI and supraglacial lake mask rasters into
+         overlapping tiles for U-Net training. Searches for matching NDWI /
+         lake-mask pairs, slides a window across them, and saves each pair
+         as compressed .npz tiles under data/tiles/images and data/tiles/masks.
 """
+
 import os
 import argparse
 import glob
