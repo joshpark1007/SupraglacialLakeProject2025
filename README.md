@@ -29,12 +29,12 @@ This ensures both datasets share a consistent spatial reference before any geome
 2. **Geometric Pre-Flight check**  
 Verify that the spatial bounds of Sentinel-2 imagery overlap with downloaded ArcticDEM tiles.
 This prevents unnecessary reprojecting/clipping of DEMs that do not intersect the study region.
-3. **DEM URL Extraction (ArcticDEM Mosaic to Strip URLs)
+3. **DEM URL Extraction (ArcticDEM Mosaic to Strip URLs)**  
 Identify which ArcticDEM strips overlap the Sentinel-2 footprint by filtering the mosaic index.
 Extract corresponding download URLs to prepare inputs for VRT construction.
-4. **DEM VRT Construction**
+4. **DEM VRT Construction**  
 Using the extracted strip URLs, build a unified DEM mosaic (.vrt) to standardize data access and minimize file handling.
-5. **DEM Reprojection and Alignment**
+5. **DEM Reprojection and Alignment**  
 Match the DEM’s CRS, resolution, and grid to Sentinel-2 geometry.
 This ensures that elevation and NDWI rasters share identical spatial coordinates.
 6. **Footprint Clipping**  
