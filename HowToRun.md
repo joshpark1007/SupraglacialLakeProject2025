@@ -62,14 +62,54 @@ data/
   tiles/
     images/                       # NDWI tiles as .npz (generated)
     masks/                        # lake-mask tiles as .npz (generated)
-
 ```
+Note:  
+- You must provide at least one Sentinel-2 L2A `.SAFE` folder in `data/raw/SAFE`
+- The ArcticDEM strip index shapefile in `data/indexes/ArcticDEM_Strip_Index_s2s041_shp/`
+ArcticDEM files are downloaded from https://data.pgc.umn.edu/elev/dem/setsm/ArcticDEM/indexes/.
 
-## Run:
+## 3. Run Pipeline:
+### Step 01: Build ArcticDEM VRT
+Use `VRT/build_vrt.py` to:  
+- read the ArcticDEM strip index
+- find strips overlapping your Sentinel tile
+- write a URL list + `fetch-dem.sh` script
+- build a DEM mosaic VRT
 
-Main
-"""
-August 3rd, 2024 Tile T22WDA (Model Set-up)
+Example (Jakobshavn tile T22WDA):
+```commandline
+python3 VRT/build_vrt.py \
+  --index "data/indexes/ArcticDEM_Strip_Index_s2s041_shp/ArcticDEM_Strip_Index_s2s041.shp" \
+  --out-dir "data/raw/ArcticDEM" \
+  --sentinel-bounds 399960 7490220 509760 7600020 \
+  --sentinel-crs EPSG:32622 \
+  --buffer-m 1000 \
+  --resolution 2m \
+  --max-strips 5
+```
+This will:  
+- create URL lists `dem_urls_raw.txt`, `dem_urls_2m.txt`, `dem_urls_10m.txt`, `dem_urls.txt`
+- create a helper downloader: `fetch-dem.sh`
+- define output paths in `data/raw/ArcticDEM/`
+
+Then, run the fetch script to download and extract DEM tiles and build the mosaic:
+```commandline
+bash data/raw/ArcticDEM/fetch-dem.sh
+```
+After this step, we will have:
+- `data/raw/ArcticDEM/tiles/*_dem.tif`
+- `data/raw/ArcticDEM/arcticdem_mosaic.vrt`
+
+### Step 02: Run the Geospatial Pipeline (NDWI + Lake Mask + Vectors)
+Use `main.py` to:  
+- extract CRS and do overlap checks
+- align DEM to Sentinel grid
+- compute NDWI and conduct thresholding
+- conduct elevation filtering using DEM
+- export lake masks and vector polygons
+
+Example (Jakobshavn August 3rd 2024, tile T22WDA):
+```
 python main.py process \
   --safe "data/raw/SAFE/S2B_MSIL2A_20240803T151809_N0511_R068_T22WDA_20240803T192030.SAFE" \
   --dem  "data/raw/ArcticDEM/arcticdem_mosaic.vrt" \
@@ -78,28 +118,27 @@ python main.py process \
   --emin 0 \
   --min-area-m2 1000 \
   --ext gpkg    
-"""
+```
+This will:  
+- compute NDWI from B03/B08
+- align and clip ArcticDEM to the Sentinel grid
+- write an NDWI-based binary mask: `data/derived/lakes/2024-08-03_T22WDA_ndwi_0.25.tif`
+- apply elevation filtering and save a supraglacial lake mask: `data/derived/lakes/2024-08-03_T22WDA_lake_ndwi0.25_dem0.tif`
+- polygonize lakes and save a vector layer: `data/derived/lakes/2024-08-03_T22WDA_lakes.gpkg`
+- cache aligned DEM products:
+  - `data/derived/lakes/dem_to_sentinel.tif`
+  - `data/derived/lakes/dem_to_sentinel_clipped.tif`
+Note: Use `main.py batch` to process all `.SAFE` folders under the root directory.
 
-Build VRT
-Usage:
-
- python3 VRT/build_vrt.py \
-  --index "data/indexes/ArcticDEM_Strip_Index_s2s041_shp/ArcticDEM_Strip_Index_s2s041.shp" \
-  --out-dir "data/raw/ArcticDEM" \
-  --sentinel-bounds 399960 7490220 509760 7600020 \
-  --sentinel-crs EPSG:32622 \
-  --buffer-m 1000 \
-  --resolution 2m \
-  --max-strips 5
- 
-make_tiles.py
-Expected Script:
+### Step 03: Generate Tiles for U-Net Training
+Once NDWI and lake-mask rasters exist in `data/derived/lakes`, use `make_tiles.py` to cut them into overlapping tiles.
+```commandline
 python make_tiles.py \
   --in-dir data/derived/lakes \
   --out-dir data/tiles \
   --tile-size 256 \
   --stride 128
-
+```
 What the script does:
 - Searches for NDWI rasters named:
       <timestamp>_<tile>_ndwi_0.25.tif
@@ -109,14 +148,38 @@ What the script does:
 - Slides a window across both rasters:
       window size = tile-size (default 256)
       step size   = stride (default 128)
-- Saves each tile as a compressed .npz file:
-      images/  → NDWI tiles (shape: 1 × H × W)
-      masks/   → binary lake-mask tiles (shape: H × W)
 
-Purpose: finding files like 2024-08-03_T22WDA_ndwi_0.25.tif, match with 2024-08-03_T22WDA_lake_ndwi0.25_dem0.tif
-and cut them into aligned tiles for image segmentation modeling
+This will save each aligned pair as compressed `.npz` files:
+- `data/tiles/images/` → NDWI tiles (shape: (1, H, W))
+- `data/tiles/masks/` → binary lake-mask tiles (shape: (H, W))
 
-Output:
-Creates a dataset directory containing two subfolders:
-    data/derived/tiles/images/
-    data/derived/tiles/masks/
+### Step 04: Train the U-Net Model
+`train.py` looks for tiles in `data/tiles/images and data/tiles/masks`, builds a dataset, and trains a small U-Net.
+```commandline
+python train.py
+```
+This will:
+- load lake tile dataset, split into train/validation (90/10)
+- train for a few epochs with `BCEWithLogitsLoss`
+- print train/val loss per epoch
+- and save model weights to `unet_lakes.pth`
+Note: you can adjust `num_epochs`, batch size, and learning rate directly in `train.py`.
+
+### Step 05: Visualize Predictions
+Finally, use `visualization.py` to inspect qualitative results from the trained model:
+```commandline
+python visualization.py
+```
+This will:
+- load `unet_lakes.pth`
+- sample a few tile indices from `data/tiles/`
+- run inference to get probability maps
+- plot:
+    1. NDWI tile
+    2. True lake mask
+    3. Predicted prbability map
+    4. Thresholded prediction overlaid on NDWI
+Note: edit the indices list at the bottom of `visualization.py` to inspect specific tiles.
+```commandline
+visualize_samples(indices=[200, 600, 1200, 2500])
+```
