@@ -1,6 +1,8 @@
 """
 File name: dem_utils.py
-Purpose: Getting Digital Elevation Model (DEM) information & reprojecting to match a reference raster.
+Purpose: Load DEMs, reproject them to match Sentinel-2 grids, and optionally
+         clip to raster bounds. Provides alignment utilities for glacier-
+         scale DEM–Sentinel fusion.
 """
 
 import os

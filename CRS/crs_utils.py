@@ -1,7 +1,10 @@
 """
 File name: crs_utils.py
-Purpose: Extracting Coordinate Reference System (CRS) from SAFE and DEM.
+Purpose: Extract CRS and EPSG information from Sentinel-2 .SAFE directories
+         and ArcticDEM GeoTIFFs. Used to ensure consistent spatial reference
+         before reprojection and alignment.
 """
+
 import os
 import rasterio
 

@@ -1,8 +1,9 @@
 """
 File name: load_bands.py
-Purpose: Preliminary OOP codes for supraglacial lake detection. Will extract B03 and B08 from SAFE to compute
-Normalized Difference Water Index (NDWI).
+Purpose: Locate and load Sentinel-2 spectral bands (B03, B08) from .SAFE folders
+         and compute NDWI arrays for supraglacial lake detection workflows.
 """
+
 import rasterio
 import numpy as np
 from CRS.crs_utils import find_band_path

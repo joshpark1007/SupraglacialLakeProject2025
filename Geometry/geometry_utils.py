@@ -1,10 +1,10 @@
 """
 File name: geometry_utils.py
-Purpose: Check for overlap of bounds through 'transform' before continuing with the process of reprojection.
-"Preflight check" to do geometric math on box corners to see if the files overlap, before even resampling.
-Note:
-- There is a break code in main (prelim-visualization-code) to stop if the DEM files don't cover the same area.
+Purpose: Perform geometric checks (bounds transforms, overlap tests, and
+         overlap ratios) to verify whether DEM tiles and Sentinel scenes
+         intersect before reprojection.
 """
+
 from rasterio.warp import transform_bounds
 
 def bounds_overlap(bounds1, bounds2):

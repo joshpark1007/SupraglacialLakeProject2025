@@ -1,22 +1,8 @@
-# built_vrt.py
 """
-Find ArcticDEM STRIP tiles that overlap a Sentinel-2 tile and
-write a URL list + a small fetch script to download, extract, and build a VRT.
-
-# Automation done with the help of LLM (ChatGPT 5)
-
-Usage:
-
- python3 VRT/build_vrt.py \
-  --index "data/indexes/ArcticDEM_Strip_Index_s2s041_shp/ArcticDEM_Strip_Index_s2s041.shp" \
-  --out-dir "data/raw/ArcticDEM" \
-  --sentinel-bounds 399960 7490220 509760 7600020 \
-  --sentinel-crs EPSG:32622 \
-  --buffer-m 1000 \
-  --resolution 2m \
-  --max-strips 5
-
-Requires: geopandas, shapely, GDAL in PATH (for gdalbuildvrt)
+File: build_vrt.py
+Purpose: Identify overlapping ArcticDEM STRIP tiles, generate download lists,
+         create a fetch script, and assemble DEM tiles into a GDAL VRT mosaic.
+         Forms the DEM foundation for alignment with Sentinel-2 imagery.
 """
 from __future__ import annotations
 import argparse
