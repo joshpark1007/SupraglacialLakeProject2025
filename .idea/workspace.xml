@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="501671a9-5ee6-457a-b0c6-e1d740c23aec" name="Changes" comment="" />
+    <list default="true" id="501671a9-5ee6-457a-b0c6-e1d740c23aec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/HowToRun.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,12 +22,12 @@
     &quot;assignee&quot;: &quot;joshpark1007&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/joshpark1007/SupraglacialLakeProject2025.git&quot;,
-    &quot;accountId&quot;: &quot;820fc9bc-cdab-4fe1-9f80-17287e2fa4aa&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:joshpark1007/SupraglacialLakeProject2025.git",
+    "accountId": "820fc9bc-cdab-4fe1-9f80-17287e2fa4aa"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
