@@ -60,19 +60,15 @@ Compare predicted masks with ground-truth binary masks using metrics such as Int
 
 ![Visualization](images/supraglacial_visualization.jpg)
 
-### Python Tools and Libraries
+## Python Tools and Libraries ##
 
-- **rasterio** — Core library for reading, writing, and transforming geospatial rasters.  
-  Used for CRS extraction, reprojection, clipping, and NDWI computation.
-
-- **GDAL** — Geospatial engine that powers raster operations.  
-  Invoked via command-line tools (e.g., `gdalbuildvrt`) to mosaic ArcticDEM strips into a unified VRT.
-
-- **geopandas** — Used for loading shapefiles and vector indices when validating spatial footprints or training polygons.
-
-- **numpy** — Array math for raster operations, resampling, mask creation, and preprocessing before tiling.
-
-- **matplotlib** — Used primarily for debugging and analysis: plotting NDWI maps, DEM slices, and U-Net outputs.
+- **rasterio/GDAL** — reading Sentinel-2 .SAFE data, ArcticDEM GeoTIFFs, building VRT mosaics, handling CRS transformations, clipping rasters.
+- **NumPy/SciPy** — numerical operations, array manipulation, NDWI computation.
+- **Shapely/PrProj** — geometric footprint checks, CRS conversions, bounding box comparisons.
+- **Torch/Torchvision** — model definition (U-Net), datasets, training loops, dataloaders.
+- **Matplotlib** — visualization of NDWI, masks, probability maps, U-Net outputs.
+- **tqdm** — progress bars for long operations (tiling, DEM processing, training).
+- **glob/pathlib/os** — safe filesystem traversal and .SAFE directory parsing.
 
 ## File Descriptions (bookkeeping) ##
 #### 1. Sentinel & DEM Processing
