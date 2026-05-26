@@ -1,0 +1,90 @@
+<Test 01>
+Tested on T22WEA | 2019.08.02
+S2A_MSIL2A_20190802T150921_N0500_R025_T22WEA_20230504T200935.SAFE
+
+File: surface_CW2019.geojson
+Original CRS: EPSG:4326
+Original bounds: [-51.50309426  68.24387504 -46.78020172  71.96354124]
+Projected bounds: [ 482432.24887416 7570274.23517506  670890.26255108 7984908.39338459]
+Intersecting polygons: 99
+
+File: surface_SW2019.geojson
+Original CRS: EPSG:4326
+Original bounds: [-50.25640092  61.38052479 -44.48736773  68.27413008]
+Projected bounds: [ 534047.76036915 6809887.73292072  846600.01622653 7577640.1444553 ]
+Intersecting polygons: 259
+
+[First Benchmark] Threshold 0.5
+Truth pixels: 1587836
+Predicted pixels: 578154
+{'precision': np.float64(0.46044306534244406), 'recall': np.float64(0.16765396426331078), 'iou': np.float64(0.14012495111283688), 'dice': np.float64(0.2458063056616132), 'accuracy': np.float64(0.9864501444918894)}
+
+[Second Benchmark] Threshold 0.1-0.7
+Threshold 0.7:
+  very strict
+  fewer predicted lake pixels
+  higher precision maybe, lower recall
+
+Threshold 0.5:
+  standard default
+  balanced-ish starting point
+
+Threshold 0.3:
+  more permissive
+  more lake pixels predicted
+  recall should increase, precision may drop
+
+Threshold 0.1:
+  very permissive
+  catches faint model signals
+  recall high maybe, false positives likely high
+
+Testing varying performance based on confidence threshold.
+
+threshold: 0.1
+Predicted pixels: 3889435
+{'precision': np.float64(0.09386093352890564), 'recall': np.float64(0.22991417249640247), 'iou': np.float64(0.0714106730852928), 'dice': np.float64(0.1333021499210097), 'accuracy': np.float64(0.9606243924207284)}
+
+threshold: 0.3
+Predicted pixels: 1391541
+{'precision': np.float64(0.21736693349315458), 'recall': np.float64(0.19049511410498193), 'iou': np.float64(0.11299442415150009), 'dice': np.float64(0.20304580454235835), 'accuracy': np.float64(0.9803050835929541)}
+
+threshold: 0.5
+Predicted pixels: 578154
+{'precision': np.float64(0.46044306534244406), 'recall': np.float64(0.16765396426331078), 'iou': np.float64(0.14012495111283688), 'dice': np.float64(0.2458063056616132), 'accuracy': np.float64(0.9864501444918894)}
+
+threshold: 0.7
+Predicted pixels: 323205
+{'precision': np.float64(0.6552404820469777), 'recall': np.float64(0.13337460543784035), 'iou': np.float64(0.12462866276223045), 'dice': np.float64(0.22163522394338886), 'accuracy': np.float64(0.987661893955229)}
+
+<Test 02>
+Tested on T22WEA | 2018.08.05
+S2B_MSIL2A_20180805T152039_N0500_R068_T22WEA_20230624T025517.SAFE
+
+File: surface_CW2018.geojson
+Original CRS: EPSG:4326
+Original bounds: [-51.50818217  68.26045402 -47.4286041   71.88061979]
+Projected bounds: [ 482253.51313934 7572199.57089672  643970.01935815 7975642.57004044]
+Intersecting polygons: 90
+
+File: surface_SW2018.geojson
+Original CRS: EPSG:4326
+Original bounds: [-50.23394504  61.50049699 -45.3672821   68.27506203]
+Projected bounds: [ 534986.76808222 6831486.39840784  799568.84238036 7574247.72371056]
+Intersecting polygons: 210
+
+threshold: 0.1
+Predicted pixels: 2809296
+{'precision': np.float64(0.1525488948120805), 'recall': np.float64(0.3515858300790835), 'iou': np.float64(0.11905426649898389), 'dice': np.float64(0.21277657404667424), 'accuracy': np.float64(0.9736969519012876)}
+
+threshold: 0.3
+Predicted pixels: 1880130
+{'precision': np.float64(0.2032109481791142), 'recall': np.float64(0.3134438683424645), 'iou': np.float64(0.14062010602185385), 'dice': np.float64(0.24656781917039014), 'accuracy': np.float64(0.980632745080474)}
+
+threshold: 0.5
+Predicted pixels: 1233396
+{'precision': np.float64(0.283557754362749), 'recall': np.float64(0.2869253109309857), 'iou': np.float64(0.1663382601445742), 'dice': np.float64(0.2852315933183151), 'accuracy': np.float64(0.9854609141973648)}
+
+threshold: 0.7
+Predicted pixels: 570007
+{'precision': np.float64(0.5260672237358396), 'recall': np.float64(0.24600630065959828), 'iou': np.float64(0.20137603126794196), 'dice': np.float64(0.3352422988752457), 'accuracy': np.float64(0.9901360396946259)}
