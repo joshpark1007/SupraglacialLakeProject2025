@@ -1,3 +1,31 @@
+# Supraglacial Lake Detection Project Version 2 | Spring 2026
+Joshua (Chang Hyeon) Park | University of Chicago
+
+Polygon Benchmarking using (Dunmire et al., 2021) surface lake dataset.
+
+## Dataset:
+Each GeoJSON is polygon data with fields including `region`, `year`, `area `, `elevation`, with coordinates. The `unet_lakes.pth` is a segmentation model that expects raster/tile input, one-channel NDWI tiles shaped `(1, 256, 256)`. The GeoJSON files are vector labels, so we test against them by rasterizing the lake polygons onto the same grid as NDWI GeoTIFF, then comparing the U-Net prediction mask to that rasterized label mask.
+Dunmire et al., 2021 categorizes the Jakobshavn Glacier region as CW, so the selected polygons for testing is `surface_CW2018.geojson` and `surface_CW2019.geojson`.
+
+## Conceptual Mapping:
+
+NDWI GeoTIFF + surface lake GeoJSON polygons  
+-> Rasterize polygons onto NDWI grid  
+-> Tile NDWI into 256x256 windows  
+-> Run `unet_lakes.pth`  
+-> Stich probability map  
+-> Compare prediction vs. rasterized labels  
+
+## Metrics for Evaluation:
+
+IoU/Jaccard: Overlap Quality  
+Dice/F1: Segmentation overlap, often nicer for sparse masks  
+Precision: How many match truth?
+Recall: Of truth lakes, how many did model find?
+False Positive Area: model-predicted lake area outside polygons
+False Negative Area: published lake area missed by model  
+ 
+
 # Supraglacial Lake Detection Project | Fall 2025
 Joshua (Chang Hyeon) Park | University of Chicago
 ## Project Motivation & Context:
