@@ -20,9 +20,9 @@ NDWI GeoTIFF + surface lake GeoJSON polygons
 
 IoU/Jaccard: Overlap Quality  
 Dice/F1: Segmentation overlap, often nicer for sparse masks  
-Precision: How many match truth?
-Recall: Of truth lakes, how many did model find?
-False Positive Area: model-predicted lake area outside polygons
+Precision: How many match truth?  
+Recall: Of truth lakes, how many did model find?  
+False Positive Area: model-predicted lake area outside polygons  
 False Negative Area: published lake area missed by model  
  
 
